@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8004:8004"
+    container_name: honor_app
+    env_file:
+      - .env
+    depends_on:
+      - db
+  db:
+    image: postgres:11.5-alpine
+    ports:
+      - "5442:5432"
+    env_file:
+      - .env
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data:cached
+      - ./data/tmp:/var/tmp
+
+  # db:
+  #   image: mysql
+  #   ports:
+  #     - "3306:3306"
+  #   container_name: honor_my  
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - ./mysql-data:/var/lib/mysql:cached
+  # pma:
+  #   image: phpmyadmin:5-apache
+  #   env_file:
+  #     - .env
+  #   ports: 
+  #     - "8084:80"
+  #     - "9004:9000"
+  #   container_name: honor_pma
+  #   depends_on:
+  #     - db
