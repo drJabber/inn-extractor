@@ -37,7 +37,7 @@ RETURNING
 -- name: update-task-state<!
 UPDATE
     tasks
-SET state   = :new_state,
+SET state   = :new_state
 WHERE id = :task_id
 RETURNING
     updated_at;

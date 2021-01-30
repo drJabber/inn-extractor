@@ -17,7 +17,7 @@ class TaskInCreate(RWSchema):
     file: Optional[bytes]
 
 class TaskInUpdate(RWSchema):
-    state: Optional[str]
+    state: str
 
 class TaskInResponse(BaseModel):
     task: Task

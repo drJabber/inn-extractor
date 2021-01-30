@@ -75,17 +75,18 @@ class TasksRepository(BaseRepository):
     async def update_task_state( 
         self,
         *,
-        task: Task,
+        task_id: int,
         state: Optional[str] = None,
     ) -> TaskInDB:
-        task_in_db = await self.get_task_by_id(task_id=task.id)
+        task_in_db = await self.get_task_by_id(task_id=task_id)
 
         task_in_db.state = state or task_in_db.state
 
         async with self.connection.transaction():
             task_in_db.updated_at = await queries.update_task_state(
                 self.connection,
-                state=task.state,
+                task_id=task_id,
+                new_state=task_in_db.state,
             )
 
         return task_in_db

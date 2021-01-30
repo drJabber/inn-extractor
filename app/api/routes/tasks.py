@@ -1,7 +1,7 @@
 from loguru import logger
 
 from typing import Any, Dict
-from fastapi import APIRouter, Form, File, UploadFile, Depends, HTTPException, status
+from fastapi import APIRouter, Form, File, Body, UploadFile, Depends, HTTPException, status
 from app.resources import strings
 from app.db.errors import EntityDoesNotExist
 
@@ -73,7 +73,7 @@ async def create(
 @router.put("/{task_id}", response_model=TaskInResponse, name="task:update")
 async def update(
     task_id: int,
-    task_in: TaskInUpdate,
+    task_in: TaskInUpdate=Body(..., embed='true', alias='task'),
     tasks_repo: TasksRepository = Depends(get_repository(TasksRepository))
 ) -> TaskInResponse:
     wrong_task_error = HTTPException(
@@ -81,7 +81,7 @@ async def update(
         detail=strings.WRONG_TASK,
     )
     try:
-        task = await tasks_repo.update_task_state(task_id=task_in.id, state=task_in.state)
+        task = await tasks_repo.update_task_state(task_id=task_id, state=task_in.state)
     except EntityDoesNotExist as existence_error:
         raise wrong_task_error
     
