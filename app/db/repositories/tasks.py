@@ -1,9 +1,9 @@
 from typing import Optional, List, Any
 from fastapi import UploadFile
-# from pypika import Query
 from app.db.errors import EntityDoesNotExist
 from app.db.queries.queries import queries
 from app.db.repositories.base import BaseRepository
+from app.models.schemas.tasks import TaskInResponse
 from app.models.domain.tasks import Task, TaskInDB
 
 
@@ -20,25 +20,44 @@ class TasksRepository(BaseRepository):
             "task with id {0} does not exist".format(task_id),
         )
 
-    async def _get_task_from_db_record(self, *, task_row: Any):
-        return TaskInDB(
-            id = task_row["id"],
-            dt = task_row["dt"],
-            state = task_row["state"],
-            file = task_row["file"]
+    async def _get_task_from_db_record(self, task_row: Any):
+        return TaskInResponse(
+            task=Task(
+                id_ = task_row["id"],
+                dt = task_row["dt"],
+                state = task_row["state"]
+            )
+            # file = task_row["file"]
         )
 
 
     async def get_tasks_for_work(self) -> List[TaskInDB]:
         tasks = await queries.get_tasks_for_work(
             self.connection
-        ).fetchall()
-        return [
-            await self._get_task_from_db_record(
-                task_row,
-            )
-            for task_row in tasks
-        ]
+        )
+        if tasks:
+            return [
+                await self._get_task_from_db_record(
+                    task_row,
+                )
+                for task_row in tasks
+            ]
+        else:
+            return []
+
+    async def get_tasks_done_by_date(self, dt: Any) -> List[TaskInDB]:
+        tasks = await queries.get_tasks_done_by_date(
+            self.connection, dt=dt,
+        )
+        if tasks:
+            return [
+                await self._get_task_from_db_record(
+                    task_row,
+                )
+                for task_row in tasks
+            ]
+        else:
+            return []
 
     async def get_all_tasks(self) -> List[TaskInDB]:
         tasks = await queries.get_all_tasks(

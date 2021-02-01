@@ -16,5 +16,5 @@ class PersonInDB(IDModelMixin,Person):
     docno: str
     docdt: str
     snils: str
-    inn: Optional[str] = None
+    inn: Optional[str]
     status: str

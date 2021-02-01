@@ -21,3 +21,5 @@ WRONG_TASK = "unknown task id"
 CANT_FIND_TASK = "cant find task"
 CANT_CREATE_TASK = "cant create task"
 
+WRONG_PERSON = "unknown person id"
+

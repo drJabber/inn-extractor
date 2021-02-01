@@ -18,15 +18,25 @@ select  id,
         created_at
 FROM tasks;
 
--- name: get-tasks-for-work^
+-- name: get-tasks-for-work
 select  id,
         dt,
         state,
---        file,
         updated_at,
         created_at
 FROM tasks
-where state<>'done';
+where state<>'ok' 
+order by dt, id;
+
+-- name: get-tasks-done_by_date
+select  id,
+        dt,
+        state,
+        updated_at,
+        created_at
+FROM tasks
+where dt=:dt and state='ok'
+order by dt, id;
 
 -- name: create-new-task<!
 INSERT INTO tasks (dt, state)

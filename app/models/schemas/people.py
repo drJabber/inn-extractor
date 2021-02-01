@@ -4,7 +4,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from app.models.domain.people import Person
+from app.models.domain.people import PersonInDB
 from app.models.schemas.rwschema import RWSchema
 
 class PersonIn(RWSchema):
@@ -24,9 +24,8 @@ class PersonInCreate(PersonIn):
     task_id: int
 
 class PersonInUpdate(RWSchema):
-    id: int
     inn: str
     status: str
 
 class PersonInResponse(BaseModel):
-    person: Person
+    person: PersonInDB

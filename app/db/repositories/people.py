@@ -1,11 +1,9 @@
-import datetime
-
 from typing import Optional, List, Any
-# from pypika import Query
 from app.db.errors import EntityDoesNotExist
 from app.db.queries.queries import queries
 from app.db.repositories.base import BaseRepository
 from app.models.domain.people import Person, PersonInDB
+from app.models.schemas.people import PersonInResponse
 
 
 class PeopleRepository(BaseRepository):
@@ -23,38 +21,46 @@ class PeopleRepository(BaseRepository):
 
 
     async def _get_person_from_db_record(self, *, person_row: Any):
-        return PersonInDB(**person_row)
+        return PersonInResponse(
+            person=person_row
+        )
 
 
     async def get_people_by_task_id(
           self, 
           task_id : int
-          ) -> List[PersonInDB]:
+          ) -> List[PersonInResponse]:
         people = await queries.get_people_by_task_id(
             self.connection,
-            task_id
-        ).fetchall()
-        return [
-            await self._get_person_from_db_record(
-                person_row,
-            )
-            for person_row in people
-        ]
+            task_id=task_id
+        )
+        if people:
+            return [
+                await self._get_person_from_db_record(
+                    person_row=person_row,
+                )
+                for person_row in people
+            ]
+        else:
+            return []    
 
     async def get_good_people_by_task_id(
           self, 
           task_id : int
-          ) -> List[PersonInDB]:
+          ) -> List[PersonInResponse]:
         people = await queries.get_good_people_by_task_id(
             self.connection,
-            task_id
-        ).fetchall()
-        return [
-            await self._get_person_from_db_record(
-                person_row,
-            )
-            for person_row in people
-        ]
+            task_id=task_id
+        )
+        if people:
+            return [
+                await self._get_person_from_db_record(
+                    person_row=person_row,
+                )
+                for person_row in people
+            ]
+        else:
+            return []    
 
     async def get_people_for_work_by_task_id(
           self, 
@@ -141,20 +147,21 @@ class PeopleRepository(BaseRepository):
     async def update_person_inn_and_state( 
         self,
         *,
-        person: Person,
+        person_id: int,
         inn: str,
         status: str,
     ) -> PersonInDB:
-        person_in_db = await self.get_person_by_id(person_id=person.id)
+        person_in_db = await self.get_person_by_id(person_id=person_id)
 
         person_in_db.status = status or person_in_db.status
         person_in_db.inn = inn or person_in_db.inn
 
         async with self.connection.transaction():
-            person_in_db.updated_at = await queries.update_person_inn_and_status(
+            await queries.update_person_inn_and_status(
                 self.connection,
-                inn=person.inn,
-                status=person.status,
+                person_id=person_id,
+                new_inn=person_in_db.inn,
+                new_status=person_in_db.status,
             )
 
         return person_in_db

@@ -10,14 +10,12 @@ SELECT  id,
         snils,
         inn,
         status,
-        task_id, 
-       created_at,
-       updated_at
+        task_id
 FROM people
 WHERE id = :person_id;
 
 
--- name: get-people-by-task-id^
+-- name: get-people-by-task-id
 SELECT  id,
         family,
         name,
@@ -29,13 +27,11 @@ SELECT  id,
         snils,
         inn,
         status,
-        task_id,
-       created_at,
-       updated_at
+        task_id
 FROM people
 WHERE task_id = :task_id;
 
--- name: get-people-by-task-id^
+-- name: get-good-people-by-task-id
 SELECT  id,
         family,
         name,
@@ -47,10 +43,8 @@ SELECT  id,
         snils,
         inn,
         status,
-        task_id,
-        created_at,
-        updated_at
-FROM 
+        task_id
+FROM people
 WHERE task_id = :task_id and status='ok';
 
 -- name: get-people-for-work-by-task-id^
@@ -83,6 +77,4 @@ UPDATE
     people
 SET status  = :new_status,
     inn = :new_inn
-WHERE id = :person_id
-RETURNING
-    updated_at;
+WHERE id = :person_id;
