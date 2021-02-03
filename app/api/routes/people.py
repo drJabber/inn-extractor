@@ -7,7 +7,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Body
 from fastapi.encoders import jsonable_encoder
 from fastapi import APIRouter,  Depends, HTTPException, status
-
+# from starlette.responses import StreamingResponse
 from app.resources import strings
 from app.db.errors import EntityDoesNotExist
 
@@ -71,4 +71,4 @@ async def get_good_people_by_task_id(
                accept, 
                200, 
                None,
-               [JSONRenderer, CSVRenderer])
+               [JSONRenderer, CSVFileRenderer])

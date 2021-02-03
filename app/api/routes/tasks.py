@@ -46,7 +46,7 @@ async def find_task(
             )
 
 @router.get("/todo", response_model=List[TaskInResponse], name="task:todo")
-async def find_task_for_work(
+async def find_tasks_for_work(
     tasks_repo: TasksRepository = Depends(get_repository(TasksRepository))
 ) -> List[TaskInResponse]:
     wrong_task_error = HTTPException(
@@ -61,7 +61,7 @@ async def find_task_for_work(
     return tasks
 
 @router.get("/done/{dt}", response_model=List[TaskInResponse], name="task:done[dt]")
-async def find_task_for_work(
+async def find_tasks_done_by_date(
     dt: str,
     tasks_repo: TasksRepository = Depends(get_repository(TasksRepository))
 ) -> List[TaskInResponse]:

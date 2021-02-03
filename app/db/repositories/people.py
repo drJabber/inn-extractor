@@ -20,6 +20,21 @@ class PeopleRepository(BaseRepository):
         )
 
 
+    async def get_person_for_work_by_task_id(
+          self, 
+          task_id : int
+          ) -> PersonInDB:
+        person_row = await queries.get_person_for_work_by_task_id(
+            self.connection,
+            task_id
+        )
+        if person_row:
+            return PersonInDB(**person_row)
+
+        raise EntityDoesNotExist(
+            f"task {task_id} done"
+        )
+
     async def _get_person_from_db_record(self, *, person_row: Any):
         return PersonInResponse(
             person=person_row
@@ -61,25 +76,6 @@ class PeopleRepository(BaseRepository):
             ]
         else:
             return []    
-
-    async def get_people_for_work_by_task_id(
-          self, 
-          task_id : int
-          ) -> List[PersonInDB]:
-        people = await queries.get_people_for_work_by_task_id(
-            self.connection,
-            task_id
-        ).fetchall()
-        return [
-            await self._get_person_from_db_record(
-                person_row,
-            )
-            for person_row in people
-        ]
-
-    async def create_people(self, people):
-        for person in people:
-            pass
 
     async def create_new_person(
         self,

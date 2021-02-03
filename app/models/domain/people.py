@@ -7,14 +7,14 @@ class Person(RWModel):
     pass
 
 class PersonInDB(IDModelMixin,Person):
-    task_id: int
-    bdate: str
     family: str
     name: str
     patronimic_name: Optional[str]
+    bdate: str
     docser: str
     docno: str
     docdt: str
     snils: str
     inn: Optional[str]
     status: str
+    task_id: int

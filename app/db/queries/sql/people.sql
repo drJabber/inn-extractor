@@ -47,7 +47,7 @@ SELECT  id,
 FROM people
 WHERE task_id = :task_id and status='ok';
 
--- name: get-people-for-work-by-task-id^
+-- name: get-person-for-work-by-task-id^
 SELECT  id,
         family,
         name,
@@ -59,11 +59,11 @@ SELECT  id,
         snils,
         inn,
         status,
-        task_id,
-        created_at,
-        updated_at
-FROM 
-WHERE task_id = :task_id and status='new';
+        task_id
+FROM people
+WHERE task_id = :task_id and status='new'
+ORDER BY id 
+LIMIT 1;
 
 -- name: create-new-person<!
 INSERT INTO people (family, name, patronimic_name, bdate, docser, docno, docdt, snils, inn, status, task_id)

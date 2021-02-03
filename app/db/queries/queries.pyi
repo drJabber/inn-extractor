@@ -49,7 +49,7 @@ class PersonQueriesMixin:
         self, conn: Connection, *, task_id: int
     ) -> Record: ...
 
-    async def get_people_for_work_by_task_id(
+    async def get_person_for_work_by_task_id(
         self, conn: Connection, *, task_id: int
     ) -> Record: ...
 
