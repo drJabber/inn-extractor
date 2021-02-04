@@ -37,7 +37,9 @@ OPENAPI_JSON_URL: str = config("OPENAPI_JSON_URL", cast=str, default="/openapi.j
 OPENAPI_DOCS_PATH: str = config("OPENAPI_DOCS_PATH", cast=str, default="/docs")
 OPENAPI_REDOC_PATH: str = config("OPENAPI_REDOC_PATH", cast=str, default="/redoc")
 
-
+#taxru
+TAXRU_SERVICE_URL: str = config("TAXRU_SERVICE_URL", cast=str, default="https://service.nalog.ru")
+TAXRU_SERVICE_API: str = config("TAXRU_INN_API", cast=str, default="/inn-proc.do")
 # logging configuration
 
 LOGGING_LEVEL = logging.DEBUG if DEBUG else logging.INFO
