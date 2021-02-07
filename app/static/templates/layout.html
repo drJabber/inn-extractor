@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TODO App FastAPI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="{{ url_for('static', path = '/images/favicon.ico') }}" type="image/x-icon">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', path = '/css/jquery-ui.css') }}"/> -->
+    <link rel="stylesheet" href="{{ url_for('static', path = '/css/bulma/bulma.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', path = '/css/main.css') }}"/>
+    
+    <script type="text/javascript" src="{{ url_for('static', path = '/js/jquery.min.js') }}"></script>
+    
+    <script type="text/javascript" src="{{ url_for('static', path = '/js/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', path = '/js/jquery.mask.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', path = '/js/jquery.cookie.js') }}"></script>
+    
+    <script type="text/javascript" src="{{ url_for('static', path = '/js/scripts.js') }}"></script>
+    
+    <script srctype="text/javascript" src="{{ url_for('static', path = '/js/fa/all.min.js') }}" defer ></script>
+  </head>
+  <body>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3 ">
+                <aside class="menu is-hidden-mobile">
+                    <section class="hero is-info welcome is-small">
+                        <div class="hero-body">
+                            <div class="container">
+                                <h1 class="title">
+                                    Благосостояние
+                                </h1>
+                                <h2 class="subtitle">
+                                      &nbsp;
+                                </h2>
+                            </div>
+                        </div>
+                    </section>
+    
+                    <section class="section">
+                        {% include "menu.html" %}
+                    </section>
+                </aside>
+            </div>
+
+            <div class="column is-9">
+                <section class="hero is-info welcome is-small">
+                    <div class="hero-body">
+                        <div class="container">
+                            <h1 class="title">
+                                Получение ИНН
+                            </h1>
+                            <h2 class="subtitle">
+                                из сервиса nalog.ru
+                            </h2>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="section">
+                    {% block content %}
+                    {% endblock %}
+                </section>
+
+                <footer>
+                    <section class="section">
+                        <div align="center">
+                            {% include "footer.html" %}
+                        </div>
+                    </section>
+                </footer>            
+            </div>            
+        </div>
+    </div>
+  </body>
+</html>

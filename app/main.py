@@ -14,6 +14,10 @@ from app.core.config import (ALLOWED_HOSTS, API_PREFIX_V1, DEBUG,
 
 from app.core.events import create_start_app_handler, create_stop_app_handler
 
+from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
+from fastapi.templating import Jinja2Templates
+
 def get_application() -> FastAPI:
     application = FastAPI(title=PROJECT_NAME, debug=DEBUG, version=VERSION, 
           openapi_url=OPENAPI_JSON_URL, docs_url=OPENAPI_DOCS_PATH, redoc_url=OPENAPI_REDOC_PATH)
@@ -34,10 +38,16 @@ def get_application() -> FastAPI:
 
     application.include_router(api_router, prefix=API_PREFIX_V1)
 
-    application.mount(path='/app/static/html',app=StaticFiles(directory='app/static/html'), name='static_html')
-    application.mount(path='/app/static/js',app=StaticFiles(directory='app/static/js'), name='static_js')
+    application.mount(path='/static', app=StaticFiles(directory='app/static'), name='static')
 
     return application
 
 
+templates = Jinja2Templates(directory="app/static/templates")
+
 app = get_application()
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False, name="index")
+async def main(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse("index.html", {"request": request})
+

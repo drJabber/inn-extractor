@@ -14,22 +14,23 @@ class Utils:
     def get_headers():
         return {
             "User-Agent": "android/2.1.10/SomePhone",
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "Accept": "application/json",
             "Connection": "Keep-Alive",
-            "Accept-Encoding": "gzip"
+            "Accept-Encoding": "gzip,deflate,br",
+            "Accept-Language": "ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3",
+            "Referer": "https://service.nalog.ru/inn.do"
         }
 
 class Taxru:
     def __init_(self):
         pass
     
-    async def get_inn(person: PersonInDB, captcha: str, token: str) -> InnInResponse:
+    async def get_inn(pself, person: PersonInDB, captcha: str, token: str) -> InnInResponse:
 
         headers = Utils.get_headers()
 
-        state=StatusInResponse()
-        state.status='none' 
+        state=StatusInResponse(status='none', message='')
 
         docnum = person.docser
         if ' ' not in docnum:
@@ -54,30 +55,31 @@ class Taxru:
 
             }
             async with session.post(
-                config.TAXRU_SERVICE_URL+config.TAXRU_INN_API, 
-                data=json.dumps(data), 
+                config.TAXRU_SERVICE_URL+config.TAXRU_SERVICE_API, 
+                data=data, 
                 headers=headers
             ) as response:
-                if response:
+                resp = await response.json()
+                if resp:
                     state.status = 'unknown'
                     state.message = 'неизвестная ошибка'
                     if response.status == status.HTTP_200_OK:
-                        if response['code'] == '0':
+                        if resp['code'] == 0:
                             state.status='no data'
                             state.message = 'неизвестная ошибка'
-                        elif response['code'] == '1':
+                        elif resp['code'] == 1:
                             state.status='ok'
                             state.message = 'ok'
-                            inn = response['inn']
-                        elif response['code'] == '2':
+                            inn = resp['inn']
+                        elif resp['code'] == 2:
                             state.status='unknown'
                             state.message = 'неизвестная ошибка'
-                        if response['code'] == '3':
+                        elif resp['code'] == 3:
                             state.status='not identified by egrn'
                             state.message = 'ФЛ не идетнифицировано ЕГРН'
                     else:
-                        if 'ERRORS' in response:
-                            errors=response['ERRORS']
+                        if 'ERRORS' in resp:
+                            errors=resp['ERRORS']
                             if 'captcha' in errors:
                                 if errors['captcha']:
                                     state.status = 'captcha'
@@ -86,8 +88,11 @@ class Taxru:
                                     state.status = json.dumps(errors)
                                     state.message = 'неверные данные ФЛ'
                             else:
-                                state.status = json.dumps(errors)
+                                state.status = errors
                                 state.message = 'неверные данные ФЛ'
+                        elif 'ERROR' in resp:
+                            state.status = resp['ERROR']
+                            state.message = 'ошибка запроса к сервису nalog.ru'
                         else:
                             state.status = 'taxru error'
                             state.message = 'ошибка запроса к сервису nalog.ru'

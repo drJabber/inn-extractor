@@ -14,7 +14,7 @@ class TotalsInResponse(RWSchema):
     total: Optional[int]
 
 class TotalsForTaskInResponse(RWSchema):
-    task_id: int
+    task_id: Optional[int]
     has_inn: Optional[int]
     no_inn: Optional[int]
     processed: Optional[int]

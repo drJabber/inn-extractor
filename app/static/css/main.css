@@ -1,0 +1,60 @@
+﻿	body{
+		font-family: "LitteraPlainBook";
+	}
+	tr {
+		vertical-align: top;
+	}
+	.data tr{
+
+	}
+	.data td{
+		padding:20px;
+		font-family: "LitteraPlainBook";
+	}
+	.data {
+		width:100%;
+	}
+	#AMOUNT_error, #findLind_error_badLind, #findLind_error_notFound{
+		color: red;
+		font-size: small;
+	}
+	#AMOUNT_error_min, #AMOUNT_error_max, #AMOUNT_error_nums{
+		color: red;
+		font-size: small;
+	}
+	
+	#email_row, #phone_row{
+		font-weight: normal;
+	}
+	
+	.menu {
+#		height: 90px!important;
+	}
+	
+	input{
+		padding:10px;
+		font-size: 24px;
+	}
+	.errorColor {
+		border: 1px solid red;
+	}
+	li {
+		list-style-image: url(marker13.png);
+	}
+	.code{
+		    font-weight: bold;
+	}
+	#code{
+		font-weight: bold;
+		font-size: 36px;
+		padding:10px;
+	}
+	.savedFormData{
+		padding:10px;
+		white-space:nowrap;
+		font-size: 24px;
+	}
+	
+	#result{
+		overflow-y: auto;
+	}

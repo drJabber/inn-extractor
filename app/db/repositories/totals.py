@@ -14,7 +14,7 @@ class TotalsRepository(BaseRepository):
             return TotalsInResponse()    
 
     async def get_totals_for_task(self, *, task_id: int) -> TotalsForTaskInResponse:
-        totals_row = await queries.get_people_for_task_totals(
+        totals_row = await queries.get_people_totals_for_task(
             self.connection,
             task_id=task_id
         )
