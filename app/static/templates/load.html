@@ -1,15 +1,15 @@
-﻿
+
 {% extends "layout.html" %}
 {% block content %}
 	<div class="container">
 		<div class="columns">
-			<div class="column is-one-fourth">
+			<div class="column is-one-third">
 				<div class="field">
 					<div class="control">
-						<div id="capthcaImg" style="width:200px;"></div>
+						<div id="capthcaImg" style="width:400px;"></div>
 					</div>
 					<div class="control">
-						<input class="input" type="text" placeholder="Капча" id="code">
+						<input class="input" type="text" placeholder="}{апча" id="code">
 						<p class="help">Введите капчу тут</p>
 					</div>
 					<div class="control">
@@ -21,8 +21,7 @@
 				</div>
 			</div>
 			<div class="column"></div>
-			<div class="column"></div>
-			<div class="column" id="result"></div>
+			<div class="column" id="response"></div>
 		</div>
 	</div>
 {% endblock %}

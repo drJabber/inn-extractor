@@ -24,12 +24,19 @@ class Utils:
 async def get_token(
 ) -> PlainTextResponse:
     headers = Utils.get_headers()
+    # proxies = Utils.get_proxies()
+
+    proxy = None
+    if config.HTTPS_PROXY:
+        proxy = config.HTTPS_PROXY
+
     async with ClientSession(connector=TCPConnector(ssl=False)) as session:
         params = {'r': time.time()}
         async with session.get(
             config.TAXRU_SERVICE_URL+config.TAXRU_CAPTCHA_API, 
             params=params, 
-            headers=headers
+            headers=headers,
+            proxy=proxy
         ) as response:
             content = await response.text()
             return PlainTextResponse(content=content)

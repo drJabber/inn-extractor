@@ -51,3 +51,6 @@ app = get_application()
 async def main(request: Request) -> HTMLResponse:
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/load.html", response_class=HTMLResponse, include_in_schema=False, name="load")
+async def main(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse("load.html", {"request": request})

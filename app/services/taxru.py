@@ -29,6 +29,10 @@ class Taxru:
     async def get_inn(pself, person: PersonInDB, captcha: str, token: str) -> InnInResponse:
 
         headers = Utils.get_headers()
+        proxy = None
+        if config.HTTPS_PROXY:
+            proxy = config.HTTPS_PROXY
+
 
         state=StatusInResponse(status='none', message='')
 
@@ -57,7 +61,8 @@ class Taxru:
             async with session.post(
                 config.TAXRU_SERVICE_URL+config.TAXRU_SERVICE_API, 
                 data=data, 
-                headers=headers
+                headers=headers,
+                proxy = proxy
             ) as response:
                 resp = await response.json()
                 if resp:
