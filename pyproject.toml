@@ -8,7 +8,6 @@ authors = ["drJabber@gmail.com <dJabber@gmail.com>"]
 python = "^3.7"
 fastapi = "^0.63.0"
 alembic = "^1.5.2"
-uvicorn = "^0.13.3"
 pydantic = "^1.7.3"
 loguru = "^0.5.3"
 aiosql = "^3.2.0"
@@ -26,6 +25,7 @@ Jinja2 = "^2.11.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+pylint = "^2.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

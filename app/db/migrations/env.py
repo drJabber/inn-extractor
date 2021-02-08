@@ -14,6 +14,7 @@ config = context.config
 fileConfig(config.config_file_name)
 
 target_metadata = None
+print(DATABASE_URL)
 config.set_main_option("sqlalchemy.url", str(DATABASE_URL))
 
 def run_migrations_online() -> None:
