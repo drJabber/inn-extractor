@@ -161,16 +161,7 @@ $(function(){
 			$("#isOK").hide();
 		}
 	});
-	
-	$('[id="code"]').keypress(function (e) {
-	  if (e.which == 13) {
-		if($("#addCodeButton").prop('disabled')==false){
-			addCode();
-		}
-	  }
-	});
-	
-	
+		
 	resize();
 	$( "#code" ).focus();
 	refreshCaptcha()

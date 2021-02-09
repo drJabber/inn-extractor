@@ -2,26 +2,27 @@
 {% extends "layout.html" %}
 {% block content %}
 	<div class="container">
-		<div class="columns">
-			<div class="column is-one-third">
-				<div class="field">
-					<div class="control">
-						<div id="capthcaImg" style="width:400px;"></div>
-					</div>
-					<div class="control">
-						<input class="input" type="text" placeholder="}{апча" id="code">
-						<p class="help">Введите капчу тут</p>
-					</div>
-					<div class="control">
-						<div style="height:30px;font-size:34px;">
-							<span id="isOK" style="display:none; color:green">OK</span>
-							<span id="isError" style="display:none; color:red">Уже есть</span>
-						</div>
-					</div>
+		<div class="columns is-gapless">
+			<div class="column is-full ">
+				<div class="panel is-full">
+					<div class="field is-grouped">
+						<p class="control">
+							<button class="button" onclick="uploadTaskInnsAsFile()">
+							  Загрузить...
+							</button>
+						</p>
+						<p class="control">
+							<button class="button" onclick="downloadTaskInnsAsFile()">
+							  Выгрузить...
+							</button>
+						</p>
+					</div>	
 				</div>
 			</div>
-			<div class="column"></div>
-			<div class="column" id="response"></div>
+		</div>
+		<div class="columns">
+			<div class="column is-full ">
+			</div>			
 		</div>
 	</div>
 {% endblock %}

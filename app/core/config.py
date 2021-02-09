@@ -21,8 +21,8 @@ STORAGE_PATH: str=config("STORAGE_PATH", cast=str, default="/tmp")
 DATABASE_URL: DatabaseURL = config("DB_CONNECTION", cast=DatabaseURL)
 MAX_CONNECTIONS_COUNT: int = config("MAX_CONNECTIONS_COUNT", cast=int, default=10)
 MIN_CONNECTIONS_COUNT: int = config("MIN_CONNECTIONS_COUNT", cast=int, default=1)
-HTTP_PROXY: str=config("HTTP_PROXY", cast=str, default="/tmp") 
-HTTPS_PROXY: str=config("HTTP_PROXY", cast=str, default="/tmp") 
+HTTP_PROXY: str=config("HTTP_PROXY", cast=str, default=None) 
+HTTPS_PROXY: str=config("HTTP_PROXY", cast=str, default=None) 
 
 SECRET_KEY: Secret = config("SECRET_KEY", cast=Secret, default="Secret")
 
