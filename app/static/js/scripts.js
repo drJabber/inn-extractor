@@ -129,8 +129,14 @@ $(function(){
 			  url: "/api/v1/honor/person/by_captcha/"+value+"/"+token,
 			  context: document.body
 			}).done(function( data ) {
-				
 				if(data.status.status!="ok"){
+					if (data.status.status=="done"){
+						$("#isError").text("Завершено")
+					}else
+					if (data.status.status=="done"){
+						$("#isError").text("Ошибка")
+					}
+
 					$("#isError").show();
 					$("#isOK").hide();
 				}
