@@ -67,7 +67,7 @@ async def get_good_people_by_task_id(
         raise wrong_person_error
     
     return render(
-               people, 
+               jsonable_encoder(people), 
                accept, 
                200, 
                None,
