@@ -103,8 +103,8 @@ class PeopleRepository(BaseRepository):
                     docno=docno, 
                     docdt=docdt,
                     snils=snils, 
-                    inn=inn, 
-                    status=status,
+                    inn=inn or '0', 
+                    status=status or 'new',
                    )
         if transaction:
             person_row = await queries.create_new_person(
@@ -130,7 +130,7 @@ class PeopleRepository(BaseRepository):
                     patronimic_name=person.patronimic_name,
                     bdate=person.bdate,
                     docser=person.docser,
-                    docno=person.bdate,
+                    docno=person.docno,
                     docdt=person.docdt,
                     snils=person.snils,
                     inn=person.inn,

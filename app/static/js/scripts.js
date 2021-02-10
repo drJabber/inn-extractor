@@ -117,56 +117,102 @@ function buildRez(obj)
 	return text;
 }
 
-$(function(){
-	$( "#code" ).mask('000000');
-	$(document).on('input', '[id="code"]', function () {
-     	var $item = $(this);
-		value = $item.val();
-		if (value.length == 6){
-			$.ajax({
-			  type: 'PUT',
-			  timeout: 0,
-			  url: "/api/v1/honor/person/by_captcha/"+value+"/"+token,
-			  context: document.body
-			}).done(function( data ) {
-				if(data.status.status!="ok"){
-					if (data.status.status=="done"){
-						$("#isError").text("Завершено")
-					}else
-					if (data.status.status=="done"){
-						$("#isError").text("Ошибка")
-					}
+function inputCaptcha(){
+	var $item = $(this);
+	value = $item.val();
+	if (value.length == 6){
+		$.ajax({
+		  type: 'PUT',
+		  timeout: 0,
+		  url: "/api/v1/honor/person/by_captcha/"+value+"/"+token,
+		  context: document.body
+		}).done(function( data ) {
+			if(data.status.status!="ok"){
+				if (data.status.status=="done"){
+					$("#isError").text("Завершено")
+				}else
+				if (data.status.status=="done"){
+					$("#isError").text("Ошибка")
+				}
 
-					$("#isError").show();
-					$("#isOK").hide();
-				}
-				else
-				{
-					$("#isOK").show();
-					$("#isError").hide();
-				}
-				
-				$("#result").html(buildRez(data));
+				$("#isError").show();
+				$("#isOK").hide();
+			}
+			else
+			{
+				$("#isOK").show();
+				$("#isError").hide();
+			}
+			
+			$("#result").html(buildRez(data));
+			
+			refreshCaptcha();
+			$item.val("");
+		}).fail(
+			function(xhr, status, error_thrown){
+				$("#isError").show();
+				$("#isOK").hide();
+
+				$("#result").html(buildError(xhr, status, error_thrown));
 				
 				refreshCaptcha();
 				$item.val("");
-			}).fail(
-				function(xhr, status, error_thrown){
-					$("#isError").show();
-					$("#isOK").hide();
+			}
+		)		  
+	}
+	else{
+		$("#isError").hide();
+		$("#isOK").hide();
+	}
 
-					$("#result").html(buildError(xhr, status, error_thrown));
-					
-					refreshCaptcha();
-					$item.val("");
-				}
-			)		  
-		}
-		else{
-			$("#isError").hide();
-			$("#isOK").hide();
-		}
-	});
+}
+
+function inputCsvUpload(){
+	var file_data = $('#csvUpload').prop('files')[0];   
+	$('#csvFileName').text(file_data.name);
+	$('#divUpload').attr('class','control is-loading');
+
+	var form_data = new FormData();                  
+	var now = new Date();
+
+	form_data.append('dt', now.toISOString());
+	form_data.append('state', 'new');
+	form_data.append('file', file_data);
+
+	$.ajax({
+		type: 'POST',
+		timeout: 0,
+		url: "/api/v1/honor/task/",
+		context: document.body,
+		contentType: false,
+		processData: false,
+		data: form_data
+	  }).done(function( data ) {
+  			$('#divUpload').attr('class','control');
+  		  	$('#csvFileName').text("");
+		}).fail(
+			function(xhr, status, error_thrown){
+				$('#divUpload').attr('class','control');
+  		  		$('#csvFileName').text("");
+		  	}
+	  )		  
+
+	// $.ajax({
+	// 	url: "pro-img-disk.php",
+	// 	type: "POST",
+	// 	data: form_data,
+	// 	contentType: false,
+	// 	cache: false,
+	// 	processData:false,
+	// 	success: function(data){
+	// 		console.log(data);
+	// 	}
+}
+
+$(function(){
+	$( "#code" ).mask('000000');
+	$(document).on('input', '[id="code"]', inputCaptcha);
+	$('#csvUpload').change(inputCsvUpload);
 		
 	resize();
 	$( "#code" ).focus();
@@ -178,5 +224,10 @@ function refreshCaptcha(){
 					token=data;
 					$("#capthcaImg").html("<img src='https://service.nalog.ru/static/captcha.html?a="+data+"'/>");
 				});
+}
+
+
+function uploadTaskInnsAsFile(){
+
 }
 

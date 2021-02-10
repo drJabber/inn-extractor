@@ -5,18 +5,28 @@
 		<div class="columns is-gapless">
 			<div class="column is-full ">
 				<div class="panel is-full">
-					<div class="field is-grouped">
-						<p class="control">
-							<button class="button" onclick="uploadTaskInnsAsFile()">
-							  Загрузить...
-							</button>
-						</p>
-						<p class="control">
-							<button class="button" onclick="downloadTaskInnsAsFile()">
-							  Выгрузить...
-							</button>
-						</p>
-					</div>	
+                    <div class="control"  id='divUpload'>
+                        <div class="file has-name is-fullwidth ">
+                            <label class="file-label">
+                                <input class="file-input" type="file" accept='.csv, text/csv' name="csvUpload" id='csvUpload'>
+                                <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Загрузить
+                                </span>
+                                </span>
+                                <span class="file-name" id='csvFileName'></span>
+                            </label>
+                        </div>    
+                    </div>
+                    <!-- <input class="input is-hovered" type="file" accept=".csv, text/csv" name="file" placeholder="Загрузка файла" id='csvUploadInput'> -->
+                    <!-- <p class="control">
+                        <button class="button" onclick="uploadTaskInnsAsFile()">
+                            Загрузить...
+                        </button>
+                    </p> -->
 				</div>
 			</div>
 		</div>

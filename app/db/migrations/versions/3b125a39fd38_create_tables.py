@@ -71,8 +71,8 @@ def create_tasks_table() -> None:
     op.create_table(
         "tasks",
         sa.Column("id", sa.Integer, primary_key=True),
-        sa.Column("dt", sa.String(20), unique=False, nullable=False, index=False),
-        sa.Column("file", sa.LargeBinary(2**32-1), unique=False, nullable=True, index=False),
+        sa.Column("dt", sa.String(50), unique=False, nullable=False, index=False),
+#        sa.Column("file", sa.LargeBinary(2**32-1), unique=False, nullable=True, index=False),
         sa.Column("state", sa.String(100), server_default="new"),
         *timestamps(),
     )
