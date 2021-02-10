@@ -24,10 +24,11 @@ async def load(request: Request,
         status_code=status.HTTP_404_NOT_FOUND,
         detail=strings.WRONG_TASK,
     )
+    tasks = None
     try:
         tasks = await tasks_repo.get_tasks_for_work()
     except EntityDoesNotExist as existence_error:
         raise wrong_task_error
     
-    return templates.TemplateResponse("load.html", {"request": request})
+    return templates.TemplateResponse("load.html", {"request": request, "tasks": tasks})
 

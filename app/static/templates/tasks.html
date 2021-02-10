@@ -1,26 +1,30 @@
-{% if len(tasks)>0 %}
-    <table class="table">
+{% if tasks|length > 0 %}
+    <table class="table is-fullwidth is-striped is-bordered is-hoverable is-center">
         <thead>
             <tr>
                 <th>id</th>
                 <th>Задача</th>
                 <th>Статус</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for task in tasks %}
                 <tr>
-                    <th></th>
+                    <th>{{ task.task.id_}}</th>
+                    <td>{{ task.task.dt }}</td>
+                    <td>{{ task.task.state }}</td>
                     <td>
-
-                    </td>
-                    <td>
-                        
+						<p class="control">
+							<button class="button" onclick="downloadTaskInnsAsFile()">
+							  >>
+							</button>
+						</p>
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 {%  else %}
-<p>Все задачи на получение ИНН выполнены</p>
-{% end if %}
+    <p>Все задачи на получение ИНН выполнены</p>
+{% endif %}
