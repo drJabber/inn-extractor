@@ -1,11 +1,11 @@
 {% if tasks|length > 0 %}
-    <table class="table is-fullwidth is-striped is-bordered is-hoverable is-center">
+    <table class="table is-fullwidth is-striped is-bordered is-hoverable">
         <thead>
             <tr>
                 <th>id</th>
                 <th>Задача</th>
                 <th>Статус</th>
-                <th></th>
+                <th><p class="control has-text-centered">Операции</p></th>
             </tr>
         </thead>
         <tbody>
@@ -15,10 +15,8 @@
                     <td>{{ task.task.dt }}</td>
                     <td>{{ task.task.state }}</td>
                     <td>
-						<p class="control">
-							<button class="button" onclick="downloadTaskInnsAsFile()">
-							  >>
-							</button>
+						<p class="control has-text-centered">
+							<button class="button" onclick="downloadTaskInnsAsFile({{ task.task.id_ }})">>></button>
 						</p>
                     </td>
                 </tr>
