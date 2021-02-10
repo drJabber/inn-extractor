@@ -131,8 +131,8 @@ function inputCaptcha(){
 				if (data.status.status=="done"){
 					$("#isError").text("Завершено")
 				}else
-				if (data.status.status=="done"){
-					$("#isError").text("Ошибка")
+				if (data.status.status=="no data"){
+					$("#isError").text("Нет данных")
 				}
 
 				$("#isError").show();
@@ -176,7 +176,7 @@ function inputCsvUpload(){
 	var now = new Date();
 
 	form_data.append('dt', now.toISOString());
-	form_data.append('state', 'new');
+	form_data.append('state', 'новая');
 	form_data.append('file', file_data);
 
 	$.ajax({
@@ -209,6 +209,25 @@ function inputCsvUpload(){
 	// 	}
 }
 
+function downloadTaskInnsAsFile(task_id){
+	$.ajax({
+		type: 'GET',
+		timeout: 0,
+		url: "/api/v1/honor/people/good/by_task_id/"+task_id,
+		headers:{ 'Accept': 'text/csv',
+		          'Content-Type': 'text/csv' },		
+		context: document.body
+	  }).done(function( data ) {
+		  alert(data);
+		}).fail(
+			function(xhr, status, error_thrown){
+				alert("error");
+		  	}
+	  )		  
+
+}
+
+
 $(function(){
 	$( "#code" ).mask('000000');
 	$(document).on('input', '[id="code"]', inputCaptcha);
@@ -227,7 +246,4 @@ function refreshCaptcha(){
 }
 
 
-function uploadTaskInnsAsFile(){
-
-}
 

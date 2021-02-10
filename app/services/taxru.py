@@ -71,7 +71,7 @@ class Taxru:
                     if response.status == status.HTTP_200_OK:
                         if resp['code'] == 0:
                             state.status='no data'
-                            state.message = 'неизвестная ошибка'
+                            state.message = 'информация об ИНН не найдена'
                         elif resp['code'] == 1:
                             state.status='ok'
                             state.message = 'ok'
@@ -82,6 +82,9 @@ class Taxru:
                         elif resp['code'] == 3:
                             state.status='not identified by egrn'
                             state.message = 'ФЛ не идетнифицировано ЕГРН'
+                        elif resp['code'] == 99:
+                            state.status='timeout'
+                            state.message = 'Время запроса к nalog.ru превысило 180 секунд'
                     else:
                         if 'ERRORS' in resp:
                             errors=resp['ERRORS']

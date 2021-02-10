@@ -78,7 +78,7 @@ class TasksRepository(BaseRepository):
         # file: UploadFile,
     ) -> TaskInDB:
         task = TaskInDB(
-                dt=dt, state=state,  \
+                dt=dt, state=state,  
             )
 
         async with self.connection.transaction() as t:

@@ -32,7 +32,7 @@ async def process_csv_file(
     ):
     people = []
     fieldnames=['id', 'family', 'name', 'patronimic_name', 'bdate', 'docser', 'docno', 'docdt', 'snils', 'inn', 'status']
-    async with aiofiles.open(fpath, mode="r", encoding="utf-8", newline="") as afp:
+    async with aiofiles.open(fpath, mode="r", newline="") as afp:
         async with people_repo.connection.transaction() as t:
             reader = AsyncDictReader(
                         afp, 

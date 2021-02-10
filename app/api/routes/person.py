@@ -118,14 +118,19 @@ async def update_person_inn_by_token(
             person = await people_repo.get_person_for_work_by_task_id(task_id=task_id)
             inn_resp = await taxru.get_inn(person, captcha, token) 
             
-            if inn_resp.status.status != 'captcha':
+            if (inn_resp.status.status != 'captcha') and (inn_resp.status.status != 'timeout'):
                 person.status=inn_resp.status.status
                 if person.status == 'ok':
                     person.inn = inn_resp.inn
-                # await people_repo.update_person_inn_and_state(person_id=person.id_, status=person.status, inn=person.inn)
+                await people_repo.update_person_inn_and_state(person_id=person.id_, status=person.status, inn=person.inn)
             
             totals = await totals_repo.get_totals()
             totals_for_task = await totals_repo.get_totals_for_task(task_id=task_id)
+
+            if totals_for_task.to_process == 0:
+                tasks_repo.update_task_state(task_id=task_id, state='готово')                
+            elif (totals_for_task.total-totals_for_task.to_process) == 1:
+                tasks_repo.update_task_state(task_id=task_id, state='в обработке')                
 
             inn_resp.totals = totals
             inn_resp.totals_for_task = totals_for_task
