@@ -225,10 +225,10 @@ function downloadFile(data, status, xhr){
 		// IE workaround for "HTML7007: One or more blob URLs were revoked by closing 
 		// the blob for which they were created. These URLs will no longer resolve 
 		// as the data backing the URL has been freed."
-		window.navigator.msSaveBlob(blob, filename);
+		window.navigator.msSaveBlob(data, filename);
 	} else {
-		var URL = window.URL || window.webkitURL;
-		var downloadUrl = URL.createObjectURL(data);
+		var XURL = window.URL?URL:webkitURL;
+		var downloadUrl = XURL.createObjectURL(new Blob(data, {type: "text/csv"}));
 
 		if (filename) {
 			// use HTML5 a[download] attribute to specify filename
@@ -246,7 +246,9 @@ function downloadFile(data, status, xhr){
 			window.location.href = downloadUrl;
 		}
 
-		setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+		setTimeout(function () {
+			 XURL.revokeObjectURL(downloadUrl); 
+		}, 100); 
 	}
 }
 
