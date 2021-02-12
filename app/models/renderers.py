@@ -47,7 +47,6 @@ class Renderer:
         status_code: int = 200,
         headers: Optional[Dict[str, str]] = None, 
         media_type: Optional[str] = None,
-        *,
         **kwargs
     ):
         if not isinstance(value, str):
@@ -66,7 +65,6 @@ class JSONRenderer(Renderer):
         status_code: int = 200,
         headers: Optional[Dict[str, str]] = None, 
         media_type: Optional[str] = None,
-        *,
         **kwargs
     ):  
         return JSONResponse(value, status_code=status_code, headers=headers, media_type=media_type)
@@ -79,7 +77,6 @@ class CSVFileRenderer(Renderer):
         status_code: int = 200,
         headers: Optional[Dict[str, str]] = None,
         media_type: Optional[str] = None,
-        *,
         **kwargs
 
     ):
@@ -95,8 +92,10 @@ class XMLRenderer(Renderer):
     media_types = ('application/xml', 'text/xml')
 
     def render(
-        self, value: Any, status_code: int = 200,
-        headers: Optional[Dict[str, str]] = None, media_type: Optional[str] = None,
+        self, value: Any, 
+        status_code: int = 200,
+        headers: Optional[Dict[str, str]] = None, 
+        media_type: Optional[str] = None,
     ):
         try:
             value = value.json()
@@ -113,7 +112,6 @@ def render(
     status_code: Optional[int],
     headers: Optional[Dict[str, str]],
     renderers: Optional[List[Type]] = None,
-    *,
     **kwargs
 ):
     """Render response taking into accout the requested media type in 'accept'"""

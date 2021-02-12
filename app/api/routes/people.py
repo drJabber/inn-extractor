@@ -75,4 +75,6 @@ async def get_good_people_by_task_id(
                accept, 
                200, 
                None,
-               [JSONRenderer, CSVFileRenderer])
+               [JSONRenderer, CSVFileRenderer],
+               csv_header=get_csv_header()
+               )

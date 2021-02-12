@@ -53,13 +53,18 @@ async def process_csv_file(
 
 def data_to_csv(
     data: List[Dict[str, str]],
-    *,
     **kwargs) -> Any:
 
-    def get_writer(out, data, **kwargs):
+    def get_header(data, **kwargs):
+        header = kwargs.get('csv_header', None)
+        if not header:
+            header = list(data.keys())
+        return header
+
+    def get_writer(out, data):
         return  DictWriter(
                     out, 
-                    fieldnames=kwargs.get("csv_header", list(data.keys())), 
+                    fieldnames=list(data.keys()), 
                     quoting=CSV_QUOTE_MINIMAL,
                     restval='',
                     delimiter=';',
@@ -74,7 +79,7 @@ def data_to_csv(
         return ''
     elif isinstance(data, dict):
         writer=get_writer(out, data)
-        writer.writer.writerow(writer.fieldnames)                
+        writer.writer.writerow(get_header(data, kwargs))                
         writer.writerow(data)
         return out
     elif isinstance(data, list):
@@ -82,13 +87,13 @@ def data_to_csv(
             v = list(data[0].values())[0]
             if len(data[0])<=1 and isinstance(v, dict):
                 writer = get_writer(out, v)
-                writer.writer.writerow(writer.fieldnames)
+                writer.writer.writerow(get_header(data, **kwargs))
                 for item in data:
                     writer.writerow(list(item.values())[0])
                 return out.getvalue()
             elif len(data[0])>1:    
                 writer = get_writer(out, data[0])
-                writer.writer.writerow(writer.fieldnames)                
+                writer.writer.writerow(get_header(data, **kwargs))                
                 for item in data:
                     writer.writerow(item)
                 return out.getvalue()
