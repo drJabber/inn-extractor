@@ -43,8 +43,12 @@ class Renderer:
     media_types: ClassVar[Tuple[str, ...]] = ('application/jwt', 'text/plain')
 
     def render(
-        self, value: Any, status_code: int = 200,
-        headers: Optional[Dict[str, str]] = None, media_type: Optional[str] = None,
+        self, value: Any, 
+        status_code: int = 200,
+        headers: Optional[Dict[str, str]] = None, 
+        media_type: Optional[str] = None,
+        *,
+        **kwargs
     ):
         if not isinstance(value, str):
             value = str(value)
@@ -58,8 +62,12 @@ class JSONRenderer(Renderer):
     media_types = ('application/json', )
 
     def render(
-        self, value: Any, status_code: int = 200,
-        headers: Optional[Dict[str, str]] = None, media_type: Optional[str] = None,
+        self, value: Any, 
+        status_code: int = 200,
+        headers: Optional[Dict[str, str]] = None, 
+        media_type: Optional[str] = None,
+        *,
+        **kwargs
     ):  
         return JSONResponse(value, status_code=status_code, headers=headers, media_type=media_type)
 
@@ -67,11 +75,16 @@ class CSVFileRenderer(Renderer):
     media_types = ('text/csv', )
 
     def render(
-        self, value: Any, status_code: int = 200,
-        headers: Optional[Dict[str, str]] = None, media_type: Optional[str] = None,
+        self, value: Any, 
+        status_code: int = 200,
+        headers: Optional[Dict[str, str]] = None,
+        media_type: Optional[str] = None,
+        *,
+        **kwargs
+
     ):
         return Response(
-            data_to_csv(value), 
+            data_to_csv(value, **kwargs), 
             status_code=status_code, 
             media_type=media_type,
             headers={'Content-Disposition': f'attachment; filename="excelfile-{datetime.now().strftime("%Y-%m-%d")}.csv"'}
@@ -100,6 +113,8 @@ def render(
     status_code: Optional[int],
     headers: Optional[Dict[str, str]],
     renderers: Optional[List[Type]] = None,
+    *,
+    **kwargs
 ):
     """Render response taking into accout the requested media type in 'accept'"""
     renderers = renderers or [JSONRenderer, PlainTextRenderer, XMLRenderer]
@@ -108,7 +123,7 @@ def render(
             media_type = media_type.split(';')[0].strip()
             for renderer in renderers:
                 if media_type in renderer.media_types:
-                    return renderer().render(value, status_code, headers, media_type)
+                    return renderer().render(value, status_code, headers, media_type, **kwargs)
     renderer = renderers[0]
     media_type = renderer.media_types[0]
-    return renderer.render(value, status_code, headers, media_type)
+    return renderer.render(value, status_code, headers, media_type, **kwargs)

@@ -51,12 +51,15 @@ async def process_csv_file(
                         new_row[fn]=row[fn]
                 await people_repo.create_new_person(t, task_id, **new_row)
 
-def data_to_csv(data: List[Dict[str, str]]) -> Any:
+def data_to_csv(
+    data: List[Dict[str, str]],
+    *,
+    **kwargs) -> Any:
 
-    def get_writer(out, data):
+    def get_writer(out, data, **kwargs):
         return  DictWriter(
                     out, 
-                    fieldnames=list(data.keys()), 
+                    fieldnames=kwargs.get("csv_header", list(data.keys())), 
                     quoting=CSV_QUOTE_MINIMAL,
                     restval='',
                     delimiter=';',

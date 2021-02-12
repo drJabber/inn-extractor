@@ -19,6 +19,7 @@ from app.models.schemas.people  import (PersonIn,
     PersonInCreate,
     PersonInUpdate,
 )
+from app.models.people_csv import get_csv_header
 
 router = APIRouter()
 
@@ -46,7 +47,10 @@ async def get_by_task_id(
                accept, 
                200, 
                None,
-               [JSONRenderer, CSVFileRenderer])
+               [JSONRenderer, CSVFileRenderer],
+               {
+                 "csv_header": get_csv_header(),  
+               })
 
 @router.get(
       "/good/by_task_id/{task_id}", 
