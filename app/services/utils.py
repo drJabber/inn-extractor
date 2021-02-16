@@ -1,9 +1,11 @@
+from app.models.people_csv import get_field_names
 import os
 import io
 import random
 from typing import Any, List, Dict, OrderedDict
 from fastapi import UploadFile
 import aiofiles
+import xlrd
 from aiocsv import AsyncDictReader
 from csv import DictWriter, QUOTE_MINIMAL as CSV_QUOTE_MINIMAL
 from app.core.config import STORAGE_PATH
@@ -25,13 +27,31 @@ async def store_tmp_file(source: UploadFile) -> str:
 
     return fpath
 
+async def process_excel_file(fpath: str, task_id: int, people_repo: PeopleRepository):
+    people = []
+    fieldnames=get_field_names()
+    # NON ASYNCHRONOUS
+    wbook = xlrd.open_workbook(fpath)
+    sheet = wbook.sheet_by_index(0)
+    async with people_repo.connection.transaction() as t:
+        for rx in range(1, sheet.nrows):
+            new_row = OrderedDict()
+            cx = 0
+            row = sheet.row(rx)
+            for fn in fieldnames:
+                if fn!='id':
+                    new_row[fn] = row[cx]
+                cx += 1
+            await people_repo.create_new_person(t, task_id, new_row) 
+
+
 async def process_csv_file(
         fpath: str, 
         task_id: int, 
         people_repo: PeopleRepository
     ):
     people = []
-    fieldnames=['id', 'family', 'name', 'patronimic_name', 'bdate', 'docser', 'docno', 'docdt', 'snils', 'inn', 'status']
+    fieldnames=get_field_names()
     async with aiofiles.open(fpath, mode="r", newline="") as afp:
         async with people_repo.connection.transaction() as t:
             reader = AsyncDictReader(

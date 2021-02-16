@@ -18,6 +18,7 @@ MALFORMED_PAYLOAD = "could not validate credentials"
 AUTHENTICATION_REQUIRED = "authentication required"
 
 WRONG_TASK = "unknown task id"
+WRONG_FILE_TYPE = "cant process only .csv and .xls(x) files without password"
 CANT_FIND_TASK = "cant find task"
 CANT_CREATE_TASK = "cant create task"
 

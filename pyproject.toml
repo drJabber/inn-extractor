@@ -22,6 +22,8 @@ aiocsv = "^1.1.1"
 json2xml = "^3.6.0"
 aiohttp = "^3.7.3"
 Jinja2 = "^2.11.3"
+pandas = "1.1.5"
+xlrd = "1.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

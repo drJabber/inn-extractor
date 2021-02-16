@@ -1,4 +1,5 @@
 from loguru import logger
+from pathlib import Path
 
 from typing import List
 from fastapi import APIRouter, Form, File, Body, UploadFile, Depends, HTTPException, status
@@ -19,7 +20,7 @@ from app.models.schemas.tasks  import (TaskIn,
     TaskInUpdate,
 )
 
-from app.services.utils import process_csv_file, store_tmp_file
+from app.services.utils import process_csv_file, process_excel_file, store_tmp_file
 
 router = APIRouter()
 
@@ -29,8 +30,8 @@ async def find_task(
     tasks_repo: TasksRepository = Depends(get_repository(TasksRepository))
 ) -> TaskInResponse:
     wrong_task_error = HTTPException(
-        status_code=status.HTTP_423_LOCKED,
-        detail=strings.WRONG_TASK,
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail=strings.CANT_FIND_TASK,
     )
     try:
         task = await tasks_repo.get_task_by_id(task_id=task_id)
@@ -50,8 +51,8 @@ async def find_tasks_for_work(
     tasks_repo: TasksRepository = Depends(get_repository(TasksRepository))
 ) -> List[TaskInResponse]:
     wrong_task_error = HTTPException(
-        status_code=status.HTTP_423_LOCKED,
-        detail=strings.WRONG_TASK,
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail=strings.CANT_FIND_TASK,
     )
     try:
         tasks = await tasks_repo.get_tasks_for_work()
@@ -66,8 +67,8 @@ async def find_tasks_done_by_date(
     tasks_repo: TasksRepository = Depends(get_repository(TasksRepository))
 ) -> List[TaskInResponse]:
     wrong_task_error = HTTPException(
-        status_code=status.HTTP_423_LOCKED,
-        detail=strings.WRONG_TASK,
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail=strings.CANT_FIND_TASK,
     )
     try:
         tasks = await tasks_repo.get_tasks_done_by_date(dt)
@@ -85,10 +86,22 @@ async def create(
     tasks_repo: TasksRepository = Depends(get_repository(TasksRepository)),
     people_repo: PeopleRepository = Depends(get_repository(PeopleRepository)),
 ) -> TaskInResponse:
+    wrong_media_error = HTTPException(
+        status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+        detail=strings.WRONG_FILE_TYPE,
+    )
+
     task = await tasks_repo.create_new_task(state=state, dt=dt)
 
     fpath = await store_tmp_file(file)
-    people = await process_csv_file(fpath, task.id,people_repo)
+    ext = Path(fpath).suffix.lower()
+    if ext == '.csv':
+        people = await process_csv_file(fpath, task.id,people_repo)
+    elif ext == '.xls' or ext == '.xlsx':
+        people = process_excel_file(fpath, task.id,people_repo)
+    else:
+        raise wrong_media_error
+
         
     logger.info(f'file uploaded: {file.filename}')
 
@@ -108,7 +121,7 @@ async def update(
     tasks_repo: TasksRepository = Depends(get_repository(TasksRepository))
 ) -> TaskInResponse:
     wrong_task_error = HTTPException(
-        status_code=status.HTTP_423_LOCKED,
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         detail=strings.WRONG_TASK,
     )
     try:
